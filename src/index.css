@@ -1,0 +1,68 @@
+/* ================= LIGHT MODE ================= */
+[data-bs-theme="dark"] { color-scheme: dark; }
+
+[data-bs-theme="light"] body {
+  background: #faf5ee;
+  color: #5b5046;
+}
+
+[data-bs-theme="light"] p { color: #6b6258 !important; }
+
+[data-bs-theme="light"] .ftco-section h1,
+[data-bs-theme="light"] .ftco-section h2,
+[data-bs-theme="light"] .ftco-section h3,
+[data-bs-theme="light"] .ftco-section h4,
+[data-bs-theme="light"] .ftco-section h5 { color: #2b1d14; }
+
+[data-bs-theme="light"] .ftco-section .ftco-sub-title { color: #8a7a68; }
+
+[data-bs-theme="light"] .menu-entry .text h3 a,
+[data-bs-theme="light"] .menu-wrap .text h3 a,
+[data-bs-theme="light"] .blog-entry .text .heading a,
+[data-bs-theme="light"] .categories li a,
+[data-bs-theme="light"] .sidelink li a,
+[data-bs-theme="light"] .menu-entry .text .price span,
+[data-bs-theme="light"] .menu-wrap .text .price span,
+[data-bs-theme="light"] .contact-section .contact-info p span,
+[data-bs-theme="light"] .table tbody tr td.total,
+[data-bs-theme="light"] .table tbody tr td.price,
+[data-bs-theme="light"] .billing-form label { color: #2b1d14; }
+
+[data-bs-theme="light"] .pricing-entry .text h3 span,
+[data-bs-theme="light"] .pricing-entry .text .price { background: #faf5ee; }
+[data-bs-theme="light"] .pricing-entry .text h3 span { color: #2b1d14; }
+
+/* الأقسام اللي تفضل غامقة */
+[data-bs-theme="light"] :is(.ftco-footer, .ftco-intro, #ftco-testimony,
+  #section-counter, .ftco-counter, .ftco-appointment,
+  .ftco-bg-dark, .ftco-about .overlap) :is(h1, h2, h3, h4, h5, h6) { color: #fff; }
+[data-bs-theme="light"] :is(.ftco-footer, .ftco-intro, #ftco-testimony,
+  #section-counter, .ftco-counter, .ftco-appointment,
+  .ftco-bg-dark, .ftco-about .overlap) p { color: rgba(255, 255, 255, 0.75) !important; }
+
+/* الفورمز */
+[data-bs-theme="light"] .form-control,
+[data-bs-theme="light"] .contact-form .form-control {
+  color: #3b3028 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+[data-bs-theme="light"] .billing-form .form-control {
+  color: #3b3028 !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+[data-bs-theme="light"] .billing-form .icon span { color: #3b3028 !important; }
+[data-bs-theme="light"] .appointment-form .form-control {
+  color: rgba(255, 255, 255, 0.9) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* الكارت وصفحة المنتج */
+[data-bs-theme="light"] .product-details button,
+[data-bs-theme="light"] .product-details .form-control,
+[data-bs-theme="light"] .ftco-cart button,
+[data-bs-theme="light"] .ftco-cart .form-control { border: 1px solid rgba(0, 0, 0, 0.15) !important; }
+[data-bs-theme="light"] .table tbody tr td { border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important; }
+[data-bs-theme="light"] .table tbody tr td.product-remove a { border: 1px solid rgba(0, 0, 0, 0.15); }
+[data-bs-theme="light"] .cart-total { border: 1px solid rgba(0, 0, 0, 0.12); }
+[data-bs-theme="light"] .cart-total hr { background: rgba(0, 0, 0, 0.12); }
+[data-bs-theme="light"] .services-wrap .text { background: rgba(196, 155, 99, 0.12); }

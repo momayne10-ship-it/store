@@ -1,0 +1,1258 @@
+ 
+<!-- cooffee -->  ,//   بسم الله الرحمن الرحيم
+
+وثيقة متطلبات مشروع متجر القهوة الإلكتروني (Coffee Shop E-Commerce)
+​1. مصدر البيانات المعتمد (API Endpoint):
+​رابط الـ API الأساسي: [https://api.sampleapis.com/coffee/hot](https://api.sampleapis.com/coffee/hot)
+​بيانات المنتج المتاحة من الـ API:
+​id: المعرف الرقمي للمنتج.
+​title: اسم القهوة.
+​description: وصف المنتج وطريقة الإعداد.
+​ingredients: قائمة المكونات.
+​image: رابط الصورة الخاصة بالمنتج.
+​(ملاحظة تنفيذية: يتم توليد حقل price للسعر ديناميكياً داخل الكود لكل منتج).
+
+
+
+​2. المظهر والتصميم (Theme Switcher):
+​دعم الوضعين: التبديل بين الوضع الليلي (Dark Mode) والوضع النهاري (Light Mode).
+​الأيقونات:
+​أيقونة الشمس للوضع النهاري.
+​أيقونة القمر للوضع الليلي.
+​3. البحث والفلترة (Search Functionality):
+​شريط بحث ذكي (Search Bar): يتيح البحث المباشر في منتجات القهوة عن طريق:
+​الـ ID الخاص بالمنتج.
+​اسم القهوة (Title).
+
+
+​4. عرض المنتجات والتفاصيل (Products & Product Details):
+​عرض المنتجات: عرض جميع عناصر القهوة المجلوبة من الـ API على شكل بطاقات (Cards) جذابة.
+​صفحة/نافذة تفاصيل المنتج (Product Details Modal/Page): عند الضغط على أي منتج، تظهر نافذة توضح التفاصيل الكاملة (الوصف الشامل، الصورة المكبرة، المكونات Ingredients، والسعر).
+​إضافة منتج للسلة:
+​إظهار رسالة/إشعار توثيق يؤكد عملية الإضافة.
+​تحديث عداد السلة في شريط الملاحة الأعلى (Header Badge / Counter) فورياً بعدد العناصر.
+
+
+​5. إدارة سلة التسوق (Cart Functionality - متطلب إجباري):
+​التحكم بالكميات وتفاصيل السعر:
+​إمكانية زيادة وتقليل كمية كل منتج داخل السلة زرَي (+ / -).
+​حساب وتحديث السعر الإجمالي بشكل فوري وتلقائي بناءً على تغير الكميات.
+​حذف منتج من السلة:
+​إظهار نافذة تأكيد (Confirmation Modal) عند الحذف تسأل: "هل أنت متأكد؟" مع زرين (حذف وإلغاء).
+​حالة السلة الفارغة (Empty Cart State):
+​في حال عدم وجود منتجات، تظهر رسالة: "سلتك فارغة الآن، استكشف المنتجات" مع زر/رابط يحوّل المستخدم مباشرة إلى قسم المنتجات.
+
+
+​6. الحركة والتفاعلية (Animations & Transitions):
+​إضافة تأثيرات حركية (Animations) وانتقالات سلسة على مستوى العناصر، البطاقات، والنوافذ المنبثقة لضمان تجربة مستخدم (UX) ممتازة.
+​المستند الآن مكتمل وجاهز للبدء في خطوات التنفيذ البرمجي والهيكلة في أي وقت تريدين!
+
+
+
+
+ اضافه  زر +    
+ اضافه  زر -
+ اضافه  زر  delete
+ اضافه  زر  add to cart
+  عند الاضافه في السله (تم الاضافه في السله)ه 
+زر تاكيد عند حذف المنتج 
+عند افراغ السله زر تاكيد 
+الانميشن 
+
+
+
+
+<!-- 
+
+
+
+
+
+
+
+
+
+
+import React, { useContext, useState } from 'react'
+import { CartProvider, useCart } from 'react-use-cart'
+import AllCompo from '../Compo/AllCompo'
+import Footer from '../Compo/Footer'
+import { apiValue } from '../Data/AllData'
+import { Link } from 'react-router'
+import Swal from 'sweetalert2'
+
+
+
+function Page(){
+
+const data=useContext(apiValue);
+const [search, setSearch] = useState("");
+
+ const getValue = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const {addItem} = useCart();
+
+  const  defultImages =[
+
+    "images/menu-1.jpg",
+    "images/menu-2.jpg",
+    "images/menu-3.jpg",
+    "images/menu-4.jpg",
+    "images/menu-5.jpg",
+
+  ];
+
+// فلتر البحث اللي بيصفي المنتجات بناءً على اللي بيتكتب
+const filteredData = data.filter((item) => {
+    const query = search.trim();
+    if (!query) return true; // لو خانة البحث فارغة، اعرض كل المنتجات
+
+    // البحث بالمقارنة الدقيقة للـ ID (لو الـ query رقم) أو الاسم (لو نص)
+    const matchesId = item.id.toString() === query;
+    const matchesTitle = item.title && item.title.toLowerCase().includes(query.toLowerCase());
+
+    return matchesId || matchesTitle;
+  });
+ 
+return(
+
+ <div className="container">
+        <div className="row">
+
+          <div className="col-md-10 m-auto mt-5 mb-5">
+           <input 
+  onChange={getValue} 
+  className="form-control mb-4 border-secondary" 
+  placeholder="Search for coffee " 
+  style={{ 
+    backgroundColor: '#373839', 
+    color: '#ffffff', 
+    borderColor: '#6c757d' 
+  }}
+/>
+          </div>
+
+{filteredData.map((item , index)=>{
+
+// بنشوف الصورة: لو موجودة ومش فاضية أو كلمة string بناخدها، لو مفيش بنختار صورة من defultImages بالدور
+const isValidImage = item.image && item.image !== "" && item.image !== "string" && (item.image.startsWith("https") || item.image.startsWith("http") || item.image.startsWith("images/"));
+  const coffeeImage = isValidImage ? item.image : defultImages[index % defultImages.length];
+
+
+  //  معالجة العنوان والوصف لو كانوا فاضيين في الـ API
+  const itemTitle = (item.title && item.title.trim() !== "") ? item.title : "Delicious Coffee";
+
+
+return search== 0?(
+   <div key={index} className="col-lg-4 col-md-6 text-center">
+                    <div className="menu-wrap">
+   <a
+                  href="#"
+                  className="menu-img img mb-4"
+                  style={{ 
+                backgroundImage: `url(${coffeeImage})`, 
+                    backgroundSize: 'cover', 
+                    backgroundPosition: 'center',
+                    display: 'block',
+                    height: '300px',
+                    margin: 'auto',
+                  }}
+          />
+                      <div className="text">
+                        <h3 className='text-light'>
+                          {item.title}
+                        </h3>
+                        <p className='text-subheader'>
+                    {item.ingredients}
+                        </p>
+
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p className='font-weight-bold '>ID : {item.id}</p>
+                        <p>
+   <Link
+  to={`/singleproduct/${item.id}`}
+  className="btn btn-primary btn-outline-primary">
+  Details
+</Link>
+                          
+                 
+{/* <button
+  onClick={() => addItem({
+    ...item,
+    id: item.id.toString(),
+    price: 2.90
+  })}
+  className="btn btn-primary ml-3 btn-outline-primary"
+>
+  Add to cart
+</button> */}
+
+<button
+  onClick={() => {
+    addItem({
+      ...item,
+      id: item.id.toString(),
+      price: 2.90
+    });
+
+Swal.fire({
+  icon: 'success',
+  title: 'Awesome!',
+  text: `You have added to your cart!`,
+  confirmButtonColor: '#0c924d',
+  width: '300px',          // عرض مناسب ومستطيل
+  padding: '1em',          // تقليص المساحات الداخلية عشان ما تبقاش طويلة
+  showCloseButton: true,
+  timer: 2000
+});
+  }}
+  className="btn btn-primary ml-3 btn-outline-primary"
+>
+  Add to cart
+</button>
+
+                        </p>
+                      </div>
+                    </div>
+
+                  </div>
+): item.id == search ?(
+
+  <div key={index} className="col-lg-4 col-md-6 text-center">
+                    <div className="menu-wrap">
+   <a
+                  href="#"
+                  className="menu-img img mb-4"
+                  style={{ 
+                backgroundImage: `url(${coffeeImage})`, 
+                    backgroundSize: 'cover', 
+                    backgroundPosition: 'center',
+                    display: 'block',
+                    height: '300px',
+                    margin: 'auto',
+                  }}
+          />
+                      <div className="text">
+                        <h3 className='text-light'>
+                          {item.title}
+                        </h3>
+                        <p className='text-subheader'>
+                    {item.ingredients}
+                        </p>
+
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p className='font-weight-bold '>ID : {item.id}</p>
+                        <p>
+ <Link
+  to={`/singleproduct/${item.id}`}
+  className="btn btn-primary btn-outline-primary">
+  Details
+</Link>
+                 
+{/* <button
+
+onClick={() => {
+  addItem({
+    ...item,
+    id: item.id.toString(),
+    price: 2.90
+  });
+}}
+  className="btn btn-primary ml-3 btn-outline-primary">
+  Add to cart
+</button> */}
+
+<button
+  onClick={() => {
+    addItem({
+      ...item,
+      id: item.id.toString(),
+      price: 2.90
+    });
+    
+Swal.fire({
+  icon: 'success',
+  title: 'Awesome!',
+  text: `You have added to your cart!`,
+  confirmButtonColor: '#0c924d',
+  width: '300px',          // عرض مناسب ومستطيل
+  padding: '1em',          // تقليص المساحات الداخلية عشان ما تبقاش طويلة
+  showCloseButton: true,
+  timer: 2000
+});
+  }}
+  className="btn btn-primary ml-3 btn-outline-primary"
+>
+  Add to cart
+</button>
+
+                        </p>
+                      </div>
+                    </div>
+
+                  </div>
+
+): item.title.toUpperCase().includes(search.toUpperCase())?(
+
+  <div key={index} className="col-lg-4 col-md-6 text-center">
+                    <div className="menu-wrap">
+   <a
+                  href="#"
+                  className="menu-img img mb-4"
+                  style={{ 
+                backgroundImage: `url(${coffeeImage})`, 
+                    backgroundSize: 'cover', 
+                    backgroundPosition: 'center',
+                    display: 'block',
+                    height: '300px',
+                    margin: 'auto',
+                  }}
+          />
+                      <div className="text">
+                        <h3 className='text-light'>
+                          {item.title}
+                        </h3>
+                        <p className='text-subheader'>
+                    {item.ingredients}
+                        </p>
+                    
+
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p className='font-weight-bold '>ID : {item.id}</p>
+                        <p>
+<Link
+  to={`/singleproduct/${item.id}`}
+  className="btn btn-primary btn-outline-primary">
+  Details
+</Link>
+
+  {/* <button
+ 
+onClick={() => {
+  addItem({
+    ...item,
+    id: item.id.toString(),
+    price: 2.90
+  });
+
+}}
+
+  className="btn btn-primary ml-3 btn-outline-primary"
+>
+  Add to cart
+</button> */}
+         
+<button
+
+  onClick={() => {
+    addItem({
+      ...item,
+      id: item.id.toString(),
+      price: 2.90
+    });
+
+   Swal.fire({
+  icon: 'success',
+  title: 'Awesome!',
+  text: `You have added ${item.title || 'the item'} to your cart!`,
+  confirmButtonColor: '#c19a6b',
+  width: '300px',          // عرض مناسب ومستطيل
+  padding: '1em',          // تقليص المساحات الداخلية عشان ما تبقاش طويلة
+  showCloseButton: true,
+  timer: 2000
+});
+
+  }}
+  className="btn btn-primary ml-3 btn-outline-primary"
+>
+  Add to cart
+</button>
+
+                        </p>
+                      </div>
+                    </div>
+
+                  </div>
+): null
+
+})}
+
+          </div>
+          </div>
+
+)
+
+}
+
+
+function AllProducts() {
+  return (
+    <CartProvider>
+
+<AllCompo/>
+<Page/>
+
+    </CartProvider>
+  )
+}
+
+export default AllProducts -->
+
+
+
+
+
+
+
+
+
+
+
+import React from 'react'
+import { useCart } from 'react-use-cart'
+
+function FtcoMenu() {
+
+const {addItem }  =useCart()
+
+  return (
+    <div>
+
+<section className="ftco-menu">
+  <div className="container">
+    <div className="row justify-content-center mb-5">
+      <div className="col-md-7 heading-section text-center ">
+        <span className="subheading">Discover</span>
+        <h2 className="mb-4 text-light">Our Products</h2>
+        <p>
+          Far far away, behind the word mountains, far from the countries
+          Vokalia and Consonantia, there live the blind texts.
+        </p>
+      </div>
+    </div>
+    <div className="row d-md-flex">
+      <div className="col-lg-12  p-md-5">
+        <div className="row">
+          <div className="col-md-12 nav-link-wrap mb-5">
+            <div
+              className="nav  nav-pills justify-content-center"
+              id="v-pills-tab"
+              role="tablist"
+              aria-orientation="vertical"
+            >
+              <a
+                className="nav-link active"
+                id="v-pills-1-tab"
+                data-toggle="pill"
+                href="#v-pills-1"
+                role="tab"
+                aria-controls="v-pills-1"
+                aria-selected="true"
+              >
+                Main Dish
+              </a>
+              <a
+                className="nav-link"
+                id="v-pills-2-tab"
+                data-toggle="pill"
+                href="#v-pills-2"
+                role="tab"
+                aria-controls="v-pills-2"
+                aria-selected="false"
+              >
+                Drinks
+              </a>
+              <a
+                className="nav-link"
+                id="v-pills-3-tab"
+                data-toggle="pill"
+                href="#v-pills-3"
+                role="tab"
+                aria-controls="v-pills-3"
+                aria-selected="false"
+              >
+                Desserts
+              </a>
+            </div>
+          </div>
+          <div className="col-md-12 d-flex align-items-center">
+            <div className="tab-content " id="v-pills-tabContent">
+              <div
+                className="tab-pane fade show active"
+                id="v-pills-1"
+                role="tabpanel"
+                aria-labelledby="v-pills-1-tab"
+              >
+                <div className="row">
+                  <div className="col-md-4 text-center">
+                    <div className="menu-wrap">
+                      <a
+                        href="#"
+                        className="menu-img img mb-4"
+                        style={{ backgroundImage: "url(images/dish-1.jpg)" }}
+                      />
+                      <div className="text">
+                        <h3>
+                          <a href="#">Grilled Beef</a>
+                        </h3>
+                        <p>
+                          Far far away, behind the word mountains, far from the
+                          countries Vokalia and Consonantia.
+                        </p>
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p>
+                          <a
+                            href="#"
+                            className="btn btn-primary btn-outline-primary"
+                          >
+                            Add to cart
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-4 text-center">
+                    <div className="menu-wrap">
+                      <a
+                        href="#"
+                        className="menu-img img mb-4"
+                        style={{ backgroundImage: "url(images/dish-2.jpg)" }}
+                      />
+                      <div className="text">
+                        <h3>
+                          <a href="#">Grilled Beef</a>
+                        </h3>
+                        <p>
+                          Far far away, behind the word mountains, far from the
+                          countries Vokalia and Consonantia.
+                        </p>
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p>
+                          <a
+                            href="#"
+                            className="btn btn-primary btn-outline-primary"
+                          >
+                            Add to cart
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-4 text-center">
+                    <div className="menu-wrap">
+                      <a
+                        href="#"
+                        className="menu-img img mb-4"
+                        style={{ backgroundImage: "url(images/dish-3.jpg)" }}
+                      />
+                      <div className="text">
+                        <h3>
+                          <a href="#">Grilled Beef</a>
+                        </h3>
+                        <p>
+                          Far far away, behind the word mountains, far from the
+                          countries Vokalia and Consonantia.
+                        </p>
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p>
+                          <a
+                            href="#"
+                            className="btn btn-primary btn-outline-primary"
+                          >
+                            Add to cart
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                className="tab-pane fade"
+                id="v-pills-2"
+                role="tabpanel"
+                aria-labelledby="v-pills-2-tab"
+              >
+                <div className="row">
+                  <div className="col-md-4 text-center">
+                    <div className="menu-wrap">
+                      <a
+                        href="#"
+                        className="menu-img img mb-4"
+                        style={{ backgroundImage: "url(images/drink-1.jpg)" }}
+                      />
+                      <div className="text">
+                        <h3>
+                          <a href="#">Lemonade Juice</a>
+                        </h3>
+                        <p>
+                          Far far away, behind the word mountains, far from the
+                          countries Vokalia and Consonantia.
+                        </p>
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p>
+                          <a
+                            href="#"
+                            className="btn btn-primary btn-outline-primary"
+                          >
+                            Add to cart
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-4 text-center">
+                    <div className="menu-wrap">
+                      <a
+                        href="#"
+                        className="menu-img img mb-4"
+                        style={{ backgroundImage: "url(images/drink-2.jpg)" }}
+                      />
+                      <div className="text">
+                        <h3>
+                          <a href="#">Pineapple Juice</a>
+                        </h3>
+                        <p>
+                          Far far away, behind the word mountains, far from the
+                          countries Vokalia and Consonantia.
+                        </p>
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p>
+                          <a
+                            href="#"
+                            className="btn btn-primary btn-outline-primary"
+                          >
+                            Add to cart
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-4 text-center">
+                    <div className="menu-wrap">
+                      <a
+                        href="#"
+                        className="menu-img img mb-4"
+                        style={{ backgroundImage: "url(images/drink-3.jpg)" }}
+                      />
+                      <div className="text">
+                        <h3>
+                          <a href="#">Soda Drinks</a>
+                        </h3>
+                        <p>
+                          Far far away, behind the word mountains, far from the
+                          countries Vokalia and Consonantia.
+                        </p>
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p>
+                          <a
+                            href="#"
+                            className="btn btn-primary btn-outline-primary"
+                          >
+                            Add to cart
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                className="tab-pane fade"
+                id="v-pills-3"
+                role="tabpanel"
+                aria-labelledby="v-pills-3-tab"
+              >
+                <div className="row">
+                  <div className="col-md-4 text-center">
+                    <div className="menu-wrap">
+                      <a
+                        href="#"
+                        className="menu-img img mb-4"
+                        style={{ backgroundImage: "url(images/dessert-1.jpg)" }}
+                      />
+                      <div className="text">
+                        <h3>
+                          <a href="#">Hot Cake Honey</a>
+                        </h3>
+                        <p>
+                          Far far away, behind the word mountains, far from the
+                          countries Vokalia and Consonantia.
+                        </p>
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p>
+                          <a
+                            href="#"
+                            className="btn btn-primary btn-outline-primary"
+                          >
+                            Add to cart
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-4 text-center">
+                    <div className="menu-wrap">
+                      <a
+                        href="#"
+                        className="menu-img img mb-4"
+                        style={{ backgroundImage: "url(images/dessert-2.jpg)" }}
+                      />
+                      <div className="text">
+                        <h3>
+                          <a href="#">Hot Cake Honey</a>
+                        </h3>
+                        <p>
+                          Far far away, behind the word mountains, far from the
+                          countries Vokalia and Consonantia.
+                        </p>
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p>
+                          <a
+                            href="#"
+                            className="btn btn-primary btn-outline-primary"
+                          >
+                            Add to cart
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-4 text-center">
+                    <div className="menu-wrap">
+                      <a
+                        href="#"
+                        className="menu-img img mb-4"
+                        style={{ backgroundImage: "url(images/dessert-3.jpg)" }}
+                      />
+                      <div className="text">
+                        <h3>
+                          <a href="#">Hot Cake Honey</a>
+                        </h3>
+                        <p>
+                          Far far away, behind the word mountains, far from the
+                          countries Vokalia and Consonantia.
+                        </p>
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p>
+                          <a
+                            href="#"
+                            className="btn btn-primary btn-outline-primary"
+                          >
+                            Add to cart
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+    </div>
+  )
+}
+
+export default FtcoMenu
+
+
+
+
+
+
+
+
+
+
+import React, { useContext, useState } from 'react'
+import { CartProvider, useCart } from 'react-use-cart'
+import AllCompo from '../Compo/AllCompo'
+import Footer from '../Compo/Footer'
+import { apiValue } from '../Data/AllData'
+import { Link } from 'react-router'
+import Swal from 'sweetalert2'
+
+
+
+function Page(){
+
+const data=useContext(apiValue);
+const [search, setSearch] = useState("");
+
+ const getValue = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const {addItem} = useCart();
+
+  const  defultImages =[
+
+    "images/menu-1.jpg",
+    "images/menu-2.jpg",
+    "images/menu-3.jpg",
+    "images/menu-4.jpg",
+    "images/menu-5.jpg",
+
+  ];
+
+// فلتر البحث اللي بيصفي المنتجات بناءً على اللي بيتكتب
+const filteredData = data.filter((item) => {
+    const query = search.trim();
+    if (!query) return true; // لو خانة البحث فارغة، اعرض كل المنتجات
+
+    // البحث بالمقارنة الدقيقة للـ ID (لو الـ query رقم) أو الاسم (لو نص)
+    const matchesId = item.id.toString() === query;
+    const matchesTitle = item.title && item.title.toLowerCase().includes(query.toLowerCase());
+
+    return matchesId || matchesTitle;
+  });
+ 
+return(
+
+ <div className="container">
+        <div className="row">
+
+          <div className="col-md-10 m-auto mt-5 mb-5">
+           <input 
+  onChange={getValue} 
+  className="form-control mb-4 border-secondary" 
+  placeholder="Search for coffee " 
+  style={{ 
+    backgroundColor: '#373839', 
+    color: '#ffffff', 
+    borderColor: '#6c757d' 
+  }}
+/>
+          </div>
+
+{filteredData.map((item , index)=>{
+
+// بنشوف الصورة: لو موجودة ومش فاضية أو كلمة string بناخدها، لو مفيش بنختار صورة من defultImages بالدور
+const isValidImage = item.image && item.image !== "" && item.image !== "string" && (item.image.startsWith("https") || item.image.startsWith("http") || item.image.startsWith("images/"));
+  const coffeeImage = isValidImage ? item.image : defultImages[index % defultImages.length];
+
+
+  //  معالجة العنوان والوصف لو كانوا فاضيين في الـ API
+  const itemTitle = (item.title && item.title.trim() !== "") ? item.title : "Delicious Coffee";
+
+
+return search== 0?(
+   <div key={index} className="col-lg-4 col-md-6 text-center">
+                    <div className="menu-wrap">
+   <a
+                  href="#"
+                  className="menu-img img mb-4"
+                  style={{ 
+                backgroundImage: `url(${coffeeImage})`, 
+                    backgroundSize: 'cover', 
+                    backgroundPosition: 'center',
+                    display: 'block',
+                    height: '300px',
+                    margin: 'auto',
+                  }}
+          />
+                      <div className="text">
+                        <h3 className='text-light'>
+                          {item.title}
+                        </h3>
+                        <p className='text-subheader'>
+                    {item.ingredients}
+                        </p>
+
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p className='font-weight-bold '>ID : {item.id}</p>
+                        <p>
+   <Link
+  to={`/singleproduct/${item.id}`}
+  className="btn btn-primary btn-outline-primary">
+  Details
+</Link>
+                          
+                 
+{/* <button
+  onClick={() => addItem({
+    ...item,
+    id: item.id.toString(),
+    price: 2.90
+  })}
+  className="btn btn-primary ml-3 btn-outline-primary"
+>
+  Add to cart
+</button> */}
+
+<button
+  onClick={() => {
+    addItem({
+      ...item,
+      id: item.id.toString(),
+      price: 2.90
+    });
+
+Swal.fire({
+  icon: 'success',
+  title: 'Awesome!',
+  text: `You have added to your cart!`,
+  confirmButtonColor: '#0c924d',
+  width: '300px',          // عرض مناسب ومستطيل
+  padding: '1em',          // تقليص المساحات الداخلية عشان ما تبقاش طويلة
+  showCloseButton: true,
+  timer: 2000
+});
+  }}
+  className="btn btn-primary ml-3 btn-outline-primary"
+>
+  Add to cart
+</button>
+
+                        </p>
+                      </div>
+                    </div>
+
+                  </div>
+): item.id == search ?(
+
+  <div key={index} className="col-lg-4 col-md-6 text-center">
+                    <div className="menu-wrap">
+   <a
+                  href="#"
+                  className="menu-img img mb-4"
+                  style={{ 
+                backgroundImage: `url(${coffeeImage})`, 
+                    backgroundSize: 'cover', 
+                    backgroundPosition: 'center',
+                    display: 'block',
+                    height: '300px',
+                    margin: 'auto',
+                  }}
+          />
+                      <div className="text">
+                        <h3 className='text-light'>
+                          {item.title}
+                        </h3>
+                        <p className='text-subheader'>
+                    {item.ingredients}
+                        </p>
+
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p className='font-weight-bold '>ID : {item.id}</p>
+                        <p>
+ <Link
+  to={`/singleproduct/${item.id}`}
+  className="btn btn-primary btn-outline-primary">
+  Details
+</Link>
+                 
+{/* <button
+
+onClick={() => {
+  addItem({
+    ...item,
+    id: item.id.toString(),
+    price: 2.90
+  });
+}}
+  className="btn btn-primary ml-3 btn-outline-primary">
+  Add to cart
+</button> */}
+
+<button
+  onClick={() => {
+    addItem({
+      ...item,
+      id: item.id.toString(),
+      price: 2.90
+    });
+    
+Swal.fire({
+  icon: 'success',
+  title: 'Awesome!',
+  text: `You have added to your cart!`,
+  confirmButtonColor: '#0c924d',
+  width: '300px',          // عرض مناسب ومستطيل
+  padding: '1em',          // تقليص المساحات الداخلية عشان ما تبقاش طويلة
+  showCloseButton: true,
+  timer: 2000
+});
+  }}
+  className="btn btn-primary ml-3 btn-outline-primary"
+>
+  Add to cart
+</button>
+
+                        </p>
+                      </div>
+                    </div>
+
+                  </div>
+
+): item.title.toUpperCase().includes(search.toUpperCase())?(
+
+  <div key={index} className="col-lg-4 col-md-6 text-center">
+                    <div className="menu-wrap">
+   <a
+                  href="#"
+                  className="menu-img img mb-4"
+                  style={{ 
+                backgroundImage: `url(${coffeeImage})`, 
+                    backgroundSize: 'cover', 
+                    backgroundPosition: 'center',
+                    display: 'block',
+                    height: '300px',
+                    margin: 'auto',
+                  }}
+          />
+                      <div className="text">
+                        <h3 className='text-light'>
+                          {item.title}
+                        </h3>
+                        <p className='text-subheader'>
+                    {item.ingredients}
+                        </p>
+                    
+
+                        <p className="price">
+                          <span>$2.90</span>
+                        </p>
+                        <p className='font-weight-bold '>ID : {item.id}</p>
+                        <p>
+<Link
+  to={`/singleproduct/${item.id}`}
+  className="btn btn-primary btn-outline-primary">
+  Details
+</Link>
+
+  {/* <button
+ 
+onClick={() => {
+  addItem({
+    ...item,
+    id: item.id.toString(),
+    price: 2.90
+  });
+
+}}
+
+  className="btn btn-primary ml-3 btn-outline-primary"
+>
+  Add to cart
+</button> */}
+         
+<button
+
+  onClick={() => {
+    addItem({
+      ...item,
+      id: item.id.toString(),
+      price: 2.90
+    });
+
+   Swal.fire({
+  icon: 'success',
+  title: 'Awesome!',
+  text: `You have added ${item.title || 'the item'} to your cart!`,
+  confirmButtonColor: '#c19a6b',
+  width: '300px',          // عرض مناسب ومستطيل
+  padding: '1em',          // تقليص المساحات الداخلية عشان ما تبقاش طويلة
+  showCloseButton: true,
+  timer: 2000
+});
+
+  }}
+  className="btn btn-primary ml-3 btn-outline-primary"
+>
+  Add to cart
+</button>
+
+                        </p>
+                      </div>
+                    </div>
+
+                  </div>
+): null
+
+})}
+
+          </div>
+          </div>
+
+)
+
+}
+
+
+function AllProducts() {
+  return (
+    <CartProvider>
+
+<AllCompo/>
+<Page/>
+
+    </CartProvider>
+  )
+}
+
+export default AllProducts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React from 'react'
+import { Link, NavLink } from 'react-router'
+import { useCart } from 'react-use-cart'
+
+function Navbar() {
+
+  const {addItem , totalUniqueItems} = useCart()
+
+  return (
+<div>
+  <nav
+    className="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light"
+    id="ftco-navbar"
+  >
+    <div className="container">
+      <NavLink className="navbar-brand" to="/">
+        Coffee<small>Blend</small>
+      </NavLink>
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#ftco-nav"
+        aria-controls="ftco-nav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="oi oi-menu" /> Menu
+      </button>
+      <div className="collapse navbar-collapse" id="ftco-nav">
+        <ul className="navbar-nav ml-auto">
+          <li className="nav-item active">
+            <NavLink to="/" className="nav-link">
+              Home
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink to="/about" className="nav-link">
+             About
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink to="/products" className="nav-link">
+             Products
+            </NavLink>
+          </li>
+
+   <li className="nav-item dropdown">
+            <a
+              className="nav-link dropdown-toggle"
+              href="room.html"
+              id="dropdown04"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Shop
+            </a>
+            <div className="dropdown-menu" aria-labelledby="dropdown04">
+              <Link className="dropdown-item" to="/products">
+                Shop
+              </Link>
+              <Link to="/singleproduct/4"  className="dropdown-item">Single Product</Link>
+              <Link className="dropdown-item" to="/cart">
+                Cart
+              </Link>
+            </div>
+          </li>
+
+                    <li className="nav-item">
+            <NavLink to="/contact" className="nav-link">
+             Contact us
+            </NavLink>
+          </li>
+
+
+   <li className="nav-item cart">
+            <Link to="/cart" className="nav-link">
+              <span className="icon icon-shopping_cart"/> 
+              <span className="bag d-flex justify-content-center align-items-center">
+                <small>{totalUniqueItems}</small>
+              </span>
+            </Link>
+          </li>
+
+
+<li className="nav-item">
+            <a href="about.html" className="nav-link">
+<span className="ion-ios-moon"></span>
+            </a>
+          </li>
+
+
+          <li className="nav-item">
+            <Link to="/login" className="nav-link">
+              <span className="oi oi-account-login"></span>
+            </Link>
+          </li>
+       
+
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+
+  )
+}
+
+export default Navbar
