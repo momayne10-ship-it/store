@@ -29,10 +29,10 @@ function AllSingleProducts() {
 
 // مصفوفة الـ 4 صور الافتراضية مع تبطيط المسار بـ / في البداية
   const defaultImages = [
-    "/images/menu-1.jpg",
-    "/images/menu-2.jpg",
-    "/images/menu-3.jpg",
-    "/images/menu-4.jpg",
+    `${import.meta.env.BASE_URL}images/menu-1.jpg`,
+    `${import.meta.env.BASE_URL}images/menu-2.jpg`,
+    `${import.meta.env.BASE_URL}images/menu-3.jpg`,
+    `${import.meta.env.BASE_URL}images/menu-4.jpg`,
   ];
 
   // التحقق من صحة الصورة

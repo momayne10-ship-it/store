@@ -28,7 +28,7 @@ function Silder() {
 <section className="home-slider owl-carousel">
   <div
     className="slider-item"
-    style={{ backgroundImage: "url(/images/bg_1.jpg)" }}
+    style={{ backgroundImage: `url(${import.meta.env.BASE_URL}images/bg_1.jpg)` }}
   >
     <div className="overlay" />
     <div className="container">
@@ -60,7 +60,7 @@ function Silder() {
   </div>
   <div
     className="slider-item"
-    style={{ backgroundImage: "url(/images/bg_2.jpg)" }}
+    style={{ backgroundImage: `url(${import.meta.env.BASE_URL}images/bg_2.jpg)` }}
   >
     <div className="overlay" />
     <div className="container">
@@ -92,7 +92,7 @@ function Silder() {
   </div>
   <div
     className="slider-item"
-    style={{ backgroundImage: "url(/images/bg_3.jpg)" }}
+    style={{ backgroundImage: `url(${import.meta.env.BASE_URL}images/bg_3.jpg)` }}
   >
     <div className="overlay" />
     <div className="container">

@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css'
 import App from './App.jsx'
-import { createBrowserRouter ,RouterProvider } from 'react-router'
+import { createHashRouter ,RouterProvider } from 'react-router'
 import { AllData } from './Data/AllData.jsx'
 import AllCart from './Cart/AllCart.jsx'
 import ScrollToTop from 'react-scroll-to-top'
@@ -18,7 +18,7 @@ import AllMenu from './Menu/AllMenu.jsx';
 const savedTheme = localStorage.getItem('theme') || 'dark'
 document.documentElement.setAttribute('data-bs-theme', savedTheme)
 
-var router = createBrowserRouter([
+var router = createHashRouter([
 
     {
         path:"/",

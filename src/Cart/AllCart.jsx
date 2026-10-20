@@ -37,10 +37,10 @@ const {items,updateItemQuantity,removeItem,totalItems,totalUniqueItems,cartTotal
 
                     <div className="col-lg-7">
                       <h5 className="mb-3">
-                        <a href="/products" className="text-body text-decoration-none">
+                        <Link to="/products" className="text-body text-decoration-none">
                           <i className="fas fa-long-arrow-alt-left me-2" />
                           Continue shopping ({totalUniqueItems})
-                        </a>
+                        </Link>
                       </h5>
                       <hr />
                       
@@ -83,7 +83,7 @@ const {items,updateItemQuantity,removeItem,totalItems,totalUniqueItems,cartTotal
                               <div className="d-flex flex-row align-items-center">
                                 <div>
                                   <img
-                                    src={item.image || '/images/menu-1.jpg'}
+                                    src={item.image || `${import.meta.env.BASE_URL}images/menu-1.jpg`}
                                     className="img-fluid rounded-3"
                                     alt={item.title || "Coffee"}
                                     style={{ width: 65, height: 65, objectFit: 'cover' }}
