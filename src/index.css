@@ -1,6 +1,15 @@
 /* ================= LIGHT MODE ================= */
 [data-bs-theme="dark"] { color-scheme: dark; }
 
+/* السماح بتمرير الصفحة عمودياً على الهاتف فوق السلايدر */
+.owl-carousel.owl-drag .owl-item {
+  touch-action: pan-y !important;
+}
+
+.owl-carousel .owl-stage-outer {
+  touch-action: pan-y !important;
+}
+
 [data-bs-theme="light"] body {
   background: #faf5ee;
   color: #5b5046;

@@ -19,6 +19,8 @@ function Silder() {
       nav: false,
       items: 1,
       dots: true,
+      touchDrag: false,
+      mouseDrag: false,
     });
   }, []);
 
